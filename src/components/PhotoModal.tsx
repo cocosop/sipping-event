@@ -7,7 +7,6 @@ import { formatRelativeTime } from '../lib/utils';
 interface PhotoModalProps {
   photos: Photo[];
   initialIndex: number;
-  guestId: string;
   onClose: () => void;
   onLike: (photoId: string) => void;
   onUnlike: (photoId: string) => void;
@@ -16,7 +15,6 @@ interface PhotoModalProps {
 export default function PhotoModal({
   photos,
   initialIndex,
-  guestId,
   onClose,
   onLike,
   onUnlike,
