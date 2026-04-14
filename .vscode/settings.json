@@ -1,0 +1,7 @@
+{
+  "deno.enable": true,
+  "deno.lint": true,
+  "deno.unstable": true,
+  // ⚡ C'est cette ligne qui fait la magie :
+  "deno.enablePaths": ["supabase/functions"]
+}
