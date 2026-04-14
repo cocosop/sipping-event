@@ -83,6 +83,7 @@ export default function PhotoCard({ photo, onLike, onUnlike, onClick, guestId}: 
           </div>
           <button
             onClick={handleDownload}
+            data-guest-id={guestId}
             className="p-1.5 rounded-full bg-white/20 hover:bg-white/40 text-white transition-colors backdrop-blur-sm"
             title="Télécharger"
           >
