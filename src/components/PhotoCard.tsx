@@ -4,7 +4,6 @@ import type { Photo } from '../lib/types';
 
 interface PhotoCardProps {
   photo: Photo;
-  guestId: string;
   onLike: (photoId: string) => void;
   onUnlike: (photoId: string) => void;
   onClick: () => void;
