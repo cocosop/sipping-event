@@ -4,20 +4,22 @@ import type { Photo } from '../lib/types';
 
 interface PhotoCardProps {
   photo: Photo;
-  onLike: (photoId: string) => void;
-  onUnlike: (photoId: string) => void;
+  guestId: string;
+  onLike: (photoId: string) => Promise<void>;   // Changé void en Promise<void>
+  onUnlike: (photoId: string) => Promise<void>; // Changé void en Promise<void>
   onClick: () => void;
 }
 
-export default function PhotoCard({ photo, onLike, onUnlike, onClick }: PhotoCardProps) {
+export default function PhotoCard({ photo, onLike, onUnlike, onClick, guestId }: PhotoCardProps) {
   const [imageLoaded, setImageLoaded] = useState(false);
 
-  function handleLikeClick(e: React.MouseEvent) {
+  // Ajout de async ici car on appelle des fonctions asynchrones
+  async function handleLikeClick(e: React.MouseEvent) {
     e.stopPropagation();
     if (photo.user_liked) {
-      onUnlike(photo.id);
+      await onUnlike(photo.id);
     } else {
-      onLike(photo.id);
+      await onLike(photo.id);
     }
   }
 
