@@ -4,13 +4,12 @@ import type { Photo } from '../lib/types';
 
 interface PhotoCardProps {
   photo: Photo;
-  guestId: string;
   onLike: (photoId: string) => Promise<void>;   // Changé void en Promise<void>
   onUnlike: (photoId: string) => Promise<void>; // Changé void en Promise<void>
   onClick: () => void;
 }
 
-export default function PhotoCard({ photo, onLike, onUnlike, onClick, guestId }: PhotoCardProps) {
+export default function PhotoCard({ photo, onLike, onUnlike, onClick}: PhotoCardProps) {
   const [imageLoaded, setImageLoaded] = useState(false);
 
   // Ajout de async ici car on appelle des fonctions asynchrones
