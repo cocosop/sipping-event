@@ -1,52 +1,66 @@
 interface LogoProps {
   size?: 'sm' | 'md' | 'lg';
-  variant?: 'light' | 'dark';
 }
 
-export default function Logo({ size = 'md', variant = 'light' }: LogoProps) {
+export default function Logo({ size = 'md' }: LogoProps) {
   const sizes = {
-    sm: { icon: 28, text: 'text-lg', gap: 'gap-2' },
-    md: { icon: 40, text: 'text-2xl', gap: 'gap-2.5' },
-    lg: { icon: 60, text: 'text-4xl', gap: 'gap-3' },
+    sm: { svgSize: 36, textMain: 'text-sm', textSub: '0.52em', gap: 'gap-2' },
+    md: { svgSize: 52, textMain: 'text-lg', textSub: '0.58em', gap: 'gap-2.5' },
+    lg: { svgSize: 76, textMain: 'text-2xl', textSub: '0.65em', gap: 'gap-3' },
   };
 
   const s = sizes[size];
-  const textColor = variant === 'light' ? 'text-white' : 'text-gray-900';
 
   return (
     <div className={`flex items-center ${s.gap}`}>
       <svg
-        width={s.icon}
-        height={s.icon}
-        viewBox="0 0 60 60"
+        width={s.svgSize}
+        height={s.svgSize}
+        viewBox="0 0 100 100"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
       >
-        <defs>
-          <linearGradient id="gold-grad" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor="#F5D87A" />
-            <stop offset="50%" stopColor="#C9A84C" />
-            <stop offset="100%" stopColor="#9D7A2A" />
-          </linearGradient>
-          <linearGradient id="rose-grad" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor="#F4A7B5" />
-            <stop offset="100%" stopColor="#E07891" />
-          </linearGradient>
-        </defs>
-        <circle cx="30" cy="30" r="28" fill="url(#gold-grad)" opacity="0.15" />
-        <circle cx="30" cy="30" r="20" fill="url(#gold-grad)" opacity="0.25" />
+        <circle cx="50" cy="50" r="46" stroke="#C9A84C" strokeWidth="2.5" fill="none" />
         <path
-          d="M30 12 L34 24 L47 24 L37 32 L41 44 L30 36 L19 44 L23 32 L13 24 L26 24 Z"
-          fill="url(#gold-grad)"
+          d="M50 18 C36 18 26 30 26 44 L26 72 L74 72 L74 44 C74 30 64 18 50 18 Z"
+          stroke="#C9A84C"
+          strokeWidth="2"
+          fill="none"
         />
-        <circle cx="30" cy="30" r="5" fill="url(#rose-grad)" />
+        <path
+          d="M50 14 C34 14 22 28 22 44 L22 76 L78 76 L78 44 C78 28 66 14 50 14 Z"
+          stroke="#C9A84C"
+          strokeWidth="1.2"
+          strokeOpacity="0.4"
+          fill="none"
+        />
+        <path
+          d="M34 42 C34 38 37 35 42 34 L50 33 L58 34 C63 35 66 38 66 42 L58 44 L50 46 L42 44 Z"
+          fill="#C9A84C"
+          fillOpacity="0.9"
+        />
+        <path
+          d="M42 44 L45 60 L55 60 L58 44 L50 46 Z"
+          fill="none"
+          stroke="#C9A84C"
+          strokeWidth="1.5"
+        />
+        <line x1="38" y1="62" x2="62" y2="62" stroke="#C9A84C" strokeWidth="1.8" strokeLinecap="round" />
       </svg>
-      <span
-        className={`font-bold tracking-[0.15em] uppercase ${s.text} ${textColor}`}
-        style={{ fontFamily: "'Playfair Display', serif", letterSpacing: '0.2em' }}
-      >
-        Bliss
-      </span>
+      <div className="flex flex-col leading-tight">
+        <span
+          className={`font-bold text-white ${s.textMain}`}
+          style={{ fontFamily: "'Playfair Display', serif", letterSpacing: '0.03em' }}
+        >
+          Casual Nights
+        </span>
+        <span
+          className="text-amber-400 uppercase tracking-widest"
+          style={{ fontFamily: "'Inter', sans-serif", fontSize: s.textSub, letterSpacing: '0.22em' }}
+        >
+          By Sipping
+        </span>
+      </div>
     </div>
   );
 }

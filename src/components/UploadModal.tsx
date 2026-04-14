@@ -1,5 +1,5 @@
 import { useState, useRef, useCallback } from 'react';
-import { X, Upload, ImagePlus, CheckCircle2, AlertCircle } from 'lucide-react';
+import { X, Upload, ImagePlus, CircleCheck as CheckCircle2, CircleAlert as AlertCircle, Film } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 import type { User } from '@supabase/supabase-js';
 
@@ -13,8 +13,13 @@ interface UploadModalProps {
 interface FileStatus {
   file: File;
   preview: string;
+  isVideo: boolean;
   status: 'pending' | 'uploading' | 'done' | 'error';
   caption: string;
+}
+
+function isVideoFile(file: File) {
+  return file.type.startsWith('video/');
 }
 
 export default function UploadModal({ eventId, user, onClose, onUploaded }: UploadModalProps) {
@@ -24,10 +29,13 @@ export default function UploadModal({ eventId, user, onClose, onUploaded }: Uplo
   const inputRef = useRef<HTMLInputElement>(null);
 
   const addFiles = useCallback((newFiles: File[]) => {
-    const imageFiles = newFiles.filter((f) => f.type.startsWith('image/'));
-    const mapped: FileStatus[] = imageFiles.map((f) => ({
+    const mediaFiles = newFiles.filter(
+      (f) => f.type.startsWith('image/') || f.type.startsWith('video/')
+    );
+    const mapped: FileStatus[] = mediaFiles.map((f) => ({
       file: f,
       preview: URL.createObjectURL(f),
+      isVideo: isVideoFile(f),
       status: 'pending',
       caption: '',
     }));
@@ -55,7 +63,7 @@ export default function UploadModal({ eventId, user, onClose, onUploaded }: Uplo
       setFiles((prev) => prev.map((item, idx) => idx === i ? { ...item, status: 'uploading' } : item));
 
       try {
-        const ext = f.file.name.split('.').pop() || 'jpg';
+        const ext = f.file.name.split('.').pop() || (f.isVideo ? 'mp4' : 'jpg');
         const path = `events/${eventId}/${crypto.randomUUID()}.${ext}`;
 
         const { error: uploadErr } = await supabase.storage
@@ -74,6 +82,7 @@ export default function UploadModal({ eventId, user, onClose, onUploaded }: Uplo
           url: publicUrl,
           caption: f.caption.trim() || null,
           photographer_id: user.id,
+          media_type: f.isVideo ? 'video' : 'photo',
         });
 
         if (dbErr) throw dbErr;
@@ -98,7 +107,7 @@ export default function UploadModal({ eventId, user, onClose, onUploaded }: Uplo
           <div className="flex items-center gap-2">
             <ImagePlus size={18} className="text-amber-400" />
             <h2 className="text-white font-semibold text-lg" style={{ fontFamily: "'Playfair Display', serif" }}>
-              Publier des photos
+              Publier photos & vidéos
             </h2>
           </div>
           <button onClick={onClose} className="p-1.5 rounded-full hover:bg-white/10 text-white/60 hover:text-white transition-colors">
@@ -117,15 +126,18 @@ export default function UploadModal({ eventId, user, onClose, onUploaded }: Uplo
               : 'border-white/15 hover:border-white/30 hover:bg-white/5'
           }`}
         >
-          <Upload size={28} className="mx-auto mb-2 text-white/40" />
+          <div className="flex items-center justify-center gap-3 mb-2">
+            <Upload size={22} className="text-white/40" />
+            <Film size={22} className="text-amber-400/60" />
+          </div>
           <p className="text-white/60 text-sm">
-            Glissez vos photos ici ou <span className="text-amber-400">parcourir</span>
+            Glissez photos & vidéos ici ou <span className="text-amber-400">parcourir</span>
           </p>
-          <p className="text-white/30 text-xs mt-1">JPEG, PNG, WEBP — Max 10 Mo par photo</p>
+          <p className="text-white/30 text-xs mt-1">JPEG, PNG, WEBP, MP4, MOV — Max 100 Mo par fichier</p>
           <input
             ref={inputRef}
             type="file"
-            accept="image/*"
+            accept="image/*,video/*"
             multiple
             className="hidden"
             onChange={handleFileInput}
@@ -136,8 +148,14 @@ export default function UploadModal({ eventId, user, onClose, onUploaded }: Uplo
           <div className="flex-1 overflow-y-auto space-y-3 mb-4 pr-1">
             {files.map((f, i) => (
               <div key={i} className="flex items-center gap-3 p-3 rounded-xl bg-white/5 border border-white/5">
-                <div className="relative w-14 h-14 flex-shrink-0 rounded-lg overflow-hidden">
-                  <img src={f.preview} alt="" className="w-full h-full object-cover" />
+                <div className="relative w-14 h-14 flex-shrink-0 rounded-lg overflow-hidden bg-black">
+                  {f.isVideo ? (
+                    <div className="w-full h-full flex items-center justify-center bg-amber-400/10">
+                      <Film size={22} className="text-amber-400" />
+                    </div>
+                  ) : (
+                    <img src={f.preview} alt="" className="w-full h-full object-cover" />
+                  )}
                   {f.status === 'uploading' && (
                     <div className="absolute inset-0 bg-black/60 flex items-center justify-center">
                       <div className="w-5 h-5 border-2 border-amber-400 border-t-transparent rounded-full animate-spin" />
@@ -155,7 +173,10 @@ export default function UploadModal({ eventId, user, onClose, onUploaded }: Uplo
                   )}
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="text-white/70 text-xs truncate mb-1.5">{f.file.name}</p>
+                  <div className="flex items-center gap-1.5 mb-1.5">
+                    {f.isVideo && <Film size={11} className="text-amber-400 flex-shrink-0" />}
+                    <p className="text-white/70 text-xs truncate">{f.file.name}</p>
+                  </div>
                   <input
                     type="text"
                     placeholder="Légende (optionnel)"
@@ -191,7 +212,7 @@ export default function UploadModal({ eventId, user, onClose, onUploaded }: Uplo
             className="flex-1 flex items-center justify-center gap-2 py-3 rounded-xl bg-gradient-to-r from-amber-400 to-amber-500 text-black font-semibold text-sm disabled:opacity-50 disabled:cursor-not-allowed hover:from-amber-300 hover:to-amber-400 transition-all"
           >
             <Upload size={16} />
-            {uploading ? 'Publication en cours...' : `Publier ${pendingCount > 0 ? `${pendingCount} photo${pendingCount > 1 ? 's' : ''}` : ''}`}
+            {uploading ? 'Publication en cours...' : `Publier ${pendingCount > 0 ? `${pendingCount} fichier${pendingCount > 1 ? 's' : ''}` : ''}`}
           </button>
         </div>
       </div>

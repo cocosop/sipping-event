@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { Calendar, MapPin, Heart, Images, AlertCircle } from 'lucide-react';
+import { Calendar, MapPin, Heart, Images, CircleAlert as AlertCircle } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 import type { Event, Photo } from '../lib/types';
 import { formatDate, getOrCreateGuestId } from '../lib/utils';
@@ -215,7 +215,7 @@ export default function EventGallery({ slug }: EventGalleryProps) {
             <div className="mt-12 text-center">
               <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/3 border border-white/8 text-white/30 text-xs">
                 <Heart size={11} className="text-rose-400" />
-                Souvenirs créés avec Bliss
+                Souvenirs créés avec Casual Nights by Sipping
               </div>
             </div>
           </>

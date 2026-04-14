@@ -25,7 +25,7 @@ export default function PhotoModal({
   const [comments, setComments] = useState<Comment[]>([]);
   const [loadingComments, setLoadingComments] = useState(false);
   const [newComment, setNewComment] = useState('');
-  const [guestName, setGuestName] = useState(() => localStorage.getItem('bliss_guest_name') || '');
+  const [guestName, setGuestName] = useState(() => localStorage.getItem('sipping_guest_name') || '');
   const [submitting, setSubmitting] = useState(false);
   const [showComments, setShowComments] = useState(false);
 
@@ -75,7 +75,7 @@ export default function PhotoModal({
     e.preventDefault();
     if (!newComment.trim() || !guestName.trim()) return;
     setSubmitting(true);
-    localStorage.setItem('bliss_guest_name', guestName);
+    localStorage.setItem('sipping_guest_name', guestName);
     await supabase.from('comments').insert({
       photo_id: photo.id,
       guest_name: guestName.trim(),
@@ -87,13 +87,14 @@ export default function PhotoModal({
   }
 
   async function handleDownload() {
+    const isVideo = photo.media_type === 'video';
     try {
       const response = await fetch(photo.url);
       const blob = await response.blob();
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = `bliss-${photo.id.slice(0, 8)}.jpg`;
+      a.download = `sipping-${photo.id.slice(0, 8)}.${isVideo ? 'mp4' : 'jpg'}`;
       a.click();
       URL.revokeObjectURL(url);
     } catch {
@@ -132,12 +133,23 @@ export default function PhotoModal({
             </>
           )}
 
-          <img
-            src={photo.url}
-            alt={photo.caption || 'Photo'}
-            className="max-w-full max-h-full object-contain rounded-xl shadow-2xl"
-            style={{ maxHeight: 'calc(100vh - 120px)' }}
-          />
+          {photo.media_type === 'video' ? (
+            <video
+              key={photo.id}
+              src={photo.url}
+              controls
+              autoPlay
+              className="max-w-full max-h-full rounded-xl shadow-2xl"
+              style={{ maxHeight: 'calc(100vh - 120px)' }}
+            />
+          ) : (
+            <img
+              src={photo.url}
+              alt={photo.caption || 'Photo'}
+              className="max-w-full max-h-full object-contain rounded-xl shadow-2xl"
+              style={{ maxHeight: 'calc(100vh - 120px)' }}
+            />
+          )}
 
           <div className="absolute bottom-6 left-1/2 -translate-x-1/2 text-white/50 text-sm">
             {currentIndex + 1} / {photos.length}

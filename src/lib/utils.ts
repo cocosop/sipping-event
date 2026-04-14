@@ -11,7 +11,7 @@ export function generateSlug(name: string): string {
 }
 
 export function getOrCreateGuestId(): string {
-  const key = 'bliss_guest_id';
+  const key = 'sipping_guest_id';
   let id = localStorage.getItem(key);
   if (!id) {
     id = crypto.randomUUID();

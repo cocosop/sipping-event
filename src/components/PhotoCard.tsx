@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Heart, MessageCircle, Download } from 'lucide-react';
+import { Heart, MessageCircle, Download, Play } from 'lucide-react';
 import type { Photo } from '../lib/types';
 
 interface PhotoCardProps {
@@ -10,10 +10,10 @@ interface PhotoCardProps {
   onClick: () => void;
 }
 
-export default function PhotoCard({ photo, onLike, onUnlike, onClick, guestId}: PhotoCardProps) {
-  const [imageLoaded, setImageLoaded] = useState(false);
+export default function PhotoCard({ photo, onLike, onUnlike, onClick, guestId }: PhotoCardProps) {
+  const [mediaLoaded, setMediaLoaded] = useState(false);
+  const isVideo = photo.media_type === 'video';
 
-  // Ajout de async ici car on appelle des fonctions asynchrones
   async function handleLikeClick(e: React.MouseEvent) {
     e.stopPropagation();
     if (photo.user_liked) {
@@ -31,7 +31,8 @@ export default function PhotoCard({ photo, onLike, onUnlike, onClick, guestId}: 
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = `bliss-${photo.id.slice(0, 8)}.jpg`;
+      const ext = isVideo ? 'mp4' : 'jpg';
+      a.download = `sipping-${photo.id.slice(0, 8)}.${ext}`;
       a.click();
       URL.revokeObjectURL(url);
     } catch {
@@ -44,17 +45,34 @@ export default function PhotoCard({ photo, onLike, onUnlike, onClick, guestId}: 
       className="relative group cursor-pointer overflow-hidden rounded-2xl bg-gray-900 aspect-square"
       onClick={onClick}
     >
-      {!imageLoaded && (
+      {!mediaLoaded && (
         <div className="absolute inset-0 bg-gray-800 animate-pulse" />
       )}
-      <img
-        src={photo.url}
-        alt={photo.caption || 'Photo Bliss'}
-        className={`w-full h-full object-cover transition-all duration-500 group-hover:scale-105 ${
-          imageLoaded ? 'opacity-100' : 'opacity-0'
-        }`}
-        onLoad={() => setImageLoaded(true)}
-      />
+
+      {isVideo ? (
+        <>
+          <video
+            src={photo.url}
+            className={`w-full h-full object-cover transition-all duration-500 group-hover:scale-105 ${mediaLoaded ? 'opacity-100' : 'opacity-0'}`}
+            onLoadedData={() => setMediaLoaded(true)}
+            muted
+            playsInline
+            preload="metadata"
+          />
+          <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+            <div className="w-10 h-10 rounded-full bg-black/60 backdrop-blur-sm flex items-center justify-center border border-white/20 group-hover:scale-110 transition-transform">
+              <Play size={16} className="text-white ml-0.5" fill="white" />
+            </div>
+          </div>
+        </>
+      ) : (
+        <img
+          src={photo.url}
+          alt={photo.caption || 'Photo Sipping'}
+          className={`w-full h-full object-cover transition-all duration-500 group-hover:scale-105 ${mediaLoaded ? 'opacity-100' : 'opacity-0'}`}
+          onLoad={() => setMediaLoaded(true)}
+        />
+      )}
 
       <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
 
