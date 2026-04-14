@@ -232,13 +232,23 @@ export default function PhotographerDashboard({ user }: PhotographerDashboardPro
                   <div className="grid grid-cols-3 sm:grid-cols-4 gap-3">
                     {photos.map((photo) => (
                       <div key={photo.id} className="relative group">
-                        <PhotoCard
-                          photo={photo}
-                          guestId="photographer"
-                          onLike={() => {}}
-                          onUnlike={() => {}}
-                          onClick={() => {}}
-                        />
+                       <PhotoCard
+  key={photo.id}
+  photo={photo}
+  guestId="photographer" // Doit correspondre à l'interface PhotoCardProps
+  onLike={async (_id) => { 
+    // Le photographe ne "like" pas forcément depuis ici, 
+    // mais on respecte le type Promise<void>
+    return Promise.resolve(); 
+  }}
+  onUnlike={async (_id) => { 
+    return Promise.resolve(); 
+  }}
+  onClick={() => {
+    // Si tu as un modal de prévisualisation, tu peux l'ouvrir ici
+    // ex: setSelectedPhoto(photo);
+  }}
+/>
                         <div className="absolute top-2 left-2 flex flex-col gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
                           <span className="flex items-center gap-1 px-1.5 py-0.5 rounded bg-black/70 text-white/60 text-[10px]">
                             <Clock size={8} />
