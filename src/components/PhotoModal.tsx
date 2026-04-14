@@ -118,6 +118,7 @@ export default function PhotoModal({
             <>
               <button
                 onClick={goPrev}
+                data-guest-id={guestId}
                 className="absolute left-2 lg:left-4 p-2 rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors z-10"
               >
                 <ChevronLeft size={22} />
