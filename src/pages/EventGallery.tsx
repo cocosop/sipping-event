@@ -1,5 +1,5 @@
-import { useState, useEffect, useCallback } from 'react';
-import { Calendar, MapPin, Heart, Images, AlertCircle } from 'lucide-react';
+import { useState, useEffect, useCallback, useRef } from 'react';
+import { Calendar, MapPin, Heart, Images, CircleAlert as AlertCircle, ChevronDown } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 import type { Event, Photo } from '../lib/types';
 import { formatDate, getOrCreateGuestId } from '../lib/utils';
@@ -18,7 +18,14 @@ export default function EventGallery({ slug }: EventGalleryProps) {
   const [notFound, setNotFound] = useState(false);
   const [selectedPhotoIndex, setSelectedPhotoIndex] = useState<number | null>(null);
   const guestId = getOrCreateGuestId();
+  const galleryRef = useRef<HTMLDivElement>(null);
 
+  const scrollToGallery = () => {
+    if (galleryRef.current) {
+      galleryRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+const HERO_IMAGE = 'https://images.pexels.com/photos/3407777/pexels-photo-3407777.jpeg?auto=compress&cs=tinysrgb&w=1600';
   const loadEvent = useCallback(async () => {
     const { data: eventData } = await supabase
       .from('events')
@@ -96,13 +103,8 @@ export default function EventGallery({ slug }: EventGalleryProps) {
     );
   }
 
-  function handleModalLike(photoId: string) {
-    handleLike(photoId);
-  }
-
-  function handleModalUnlike(photoId: string) {
-    handleUnlike(photoId);
-  }
+  function handleModalLike(photoId: string) { handleLike(photoId); }
+  function handleModalUnlike(photoId: string) { handleUnlike(photoId); }
 
   if (loading) {
     return (
@@ -123,7 +125,7 @@ export default function EventGallery({ slug }: EventGalleryProps) {
             Événement introuvable
           </h2>
           <p className="text-white/40 text-sm">
-            Cet événement n'existe pas ou a été supprimé. Vérifiez votre QR code.
+            Cet événement n'existe pas ou a été supprimé.
           </p>
         </div>
       </div>
@@ -134,60 +136,108 @@ export default function EventGallery({ slug }: EventGalleryProps) {
 
   return (
     <div className="min-h-screen bg-[#0d0d0d] text-white">
-      <div className="relative overflow-hidden">
-        <div className="absolute inset-0">
-          <div className="absolute top-0 left-1/3 w-96 h-96 bg-amber-400/5 rounded-full blur-3xl" />
-          <div className="absolute bottom-0 right-1/4 w-64 h-64 bg-rose-400/5 rounded-full blur-3xl" />
-        </div>
+   {/* --- SECTION HERO --- */}
+<section className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden">
+  {/* Image de fond : on utilise l'image de l'événement ou une image par défaut si non définie */}
+  <div
+    className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+    style={{ 
+      backgroundImage: `url(${event?.cover_url || 'https://images.pexels.com/photos/3407777/pexels-photo-3407777.jpeg?auto=compress&cs=tinysrgb&w=1600'})` 
+    }}
+  />
+  
+  {/* Overlays pour garantir la lisibilité du texte (identiques au Landing) */}
+  <div className="absolute inset-0 bg-gradient-to-b from-black/65 via-black/50 to-[#0d0d0d]" />
+  <div className="absolute inset-0 bg-gradient-to-r from-black/40 via-transparent to-black/40" />
 
-        <div className="relative z-10 max-w-5xl mx-auto px-4 pt-12 pb-10">
-          <div className="flex justify-center mb-8">
-            <Logo size="sm" />
-          </div>
+  <div className="relative z-10 text-center max-w-4xl mx-auto px-4">
+    <div className="flex justify-center mb-10">
+      <Logo size="lg" />
+    </div>
+     <h1
+            className="text-5xl sm:text-6xl lg:text-7xl font-bold mb-6 leading-tight"
+            style={{ fontFamily: "'Playfair Display', serif" }}
+          >
+            No flex,{' '}
+            <span className="bg-gradient-to-r from-amber-300 via-amber-400 to-amber-600 bg-clip-text text-transparent">
+              Pure vibes
+            </span>
+          </h1>
 
-          <div className="text-center">
-            <h1
-              className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-3"
-              style={{ fontFamily: "'Playfair Display', serif" }}
-            >
-              {event?.name}
-            </h1>
+          <p className="text-white/70 text-lg sm:text-xl max-w-2xl mx-auto mb-10 leading-relaxed">
+            Bienvenue sur Eipic/Casual Nights la plateforme photos vidéos qui  connecte les photographes aux invités. Souvenirs partagés, likés, commentés et téléchargés en un instant
+          </p>
 
-            {event?.description && (
-              <p className="text-white/50 text-base max-w-xl mx-auto mb-4">{event.description}</p>
+    <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold mb-8 leading-tight" style={{ fontFamily: "'Playfair Display', serif" }}>
+      {event?.name}
+    </h1>
+
+    <div className="flex flex-col items-center gap-6 mb-12">
+      <button
+        onClick={scrollToGallery}
+        className="px-10 py-4 rounded-full bg-gradient-to-r from-amber-400 to-amber-500 text-black font-bold text-lg hover:from-amber-300 hover:to-amber-400 transition-all shadow-[0_0_30px_rgba(201,168,76,0.3)] hover:shadow-[0_0_50px_rgba(201,168,76,0.5)]"
+      >
+        Découvrir les photos
+      </button>
+      <button
+        onClick={scrollToGallery}
+        className="animate-bounce p-2 rounded-full text-amber-400 hover:text-amber-300 transition-colors"
+      >
+        <ChevronDown size={32} />
+      </button>
+    </div>
+
+    {event?.description && (
+      <p className="text-white/70 text-lg sm:text-xl max-w-2xl mx-auto leading-relaxed italic">
+        "{event.description}"
+      </p>
+    )}
+  </div>
+
+  {/* Transition douce vers le contenu */}
+  <div className="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-[#0d0d0d] to-transparent" />
+</section>
+      {/* --- SECTION GALERIE (CONTENU DÉCOUVERT AU SCROLL) --- */}
+      <div className="max-w-6xl mx-auto px-4 pb-16 pt-20" ref={galleryRef}>
+        <div className="text-center mb-16">
+          <h3 className="text-4xl sm:text-5xl font-bold text-white mb-6" style={{ fontFamily: "'Playfair Display', serif" }}>
+            {event?.name}
+          </h3>
+
+          <div className="flex flex-wrap items-center justify-center gap-6 mb-10">
+            {event?.date && (
+              <span className="flex items-center gap-2 text-white/60 text-base">
+                <Calendar size={18} className="text-amber-400" />
+                {formatDate(event.date)}
+              </span>
             )}
+            {event?.venue && (
+              <span className="flex items-center gap-2 text-white/60 text-base">
+                <MapPin size={18} className="text-amber-400" />
+                {event.venue}
+              </span>
+            )}
+          </div>
 
-            <div className="flex flex-wrap items-center justify-center gap-4 mb-6">
-              {event?.date && (
-                <span className="flex items-center gap-1.5 text-white/50 text-sm">
-                  <Calendar size={14} className="text-amber-400" />
-                  {formatDate(event.date)}
-                </span>
-              )}
-              {event?.venue && (
-                <span className="flex items-center gap-1.5 text-white/50 text-sm">
-                  <MapPin size={14} className="text-amber-400" />
-                  {event.venue}
-                </span>
-              )}
+          <div className="flex items-center justify-center gap-12 mb-10">
+            <div className="text-center">
+              <p className="text-white font-bold text-4xl">{photos.length}</p>
+              <p className="text-white/30 text-xs uppercase tracking-wider mt-1">Souvenirs</p>
             </div>
-
-            <div className="flex items-center justify-center gap-6">
-              <div className="text-center">
-                <p className="text-white font-bold text-2xl">{photos.length}</p>
-                <p className="text-white/30 text-xs uppercase tracking-wider mt-0.5">Photos</p>
-              </div>
-              <div className="w-px h-8 bg-white/10" />
-              <div className="text-center">
-                <p className="text-white font-bold text-2xl">{totalLikes}</p>
-                <p className="text-white/30 text-xs uppercase tracking-wider mt-0.5">Likes</p>
-              </div>
+            <div className="w-px h-12 bg-white/10" />
+            <div className="text-center">
+              <p className="text-white font-bold text-4xl">{totalLikes}</p>
+              <p className="text-white/30 text-xs uppercase tracking-wider mt-1">Cœurs</p>
             </div>
           </div>
-        </div>
-      </div>
 
-      <div className="max-w-6xl mx-auto px-4 pb-16">
+          {event?.description && (
+            <p className="text-white/60 text-lg max-w-2xl mx-auto leading-relaxed italic">
+              "{event.description}"
+            </p>
+          )}
+        </div>
+
         {photos.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-20 text-center">
             <Images size={40} className="text-white/15 mb-4" />
@@ -196,8 +246,8 @@ export default function EventGallery({ slug }: EventGalleryProps) {
           </div>
         ) : (
           <>
-            <p className="text-white/25 text-xs text-center mb-6 uppercase tracking-widest">
-              Appuyez sur une photo pour voir les détails
+            <p className="text-white/25 text-xs text-center mb-8 uppercase tracking-[0.3em]">
+              Explorez la galerie
             </p>
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2 sm:gap-3">
               {photos.map((photo, index) => (
@@ -211,11 +261,10 @@ export default function EventGallery({ slug }: EventGalleryProps) {
                 />
               ))}
             </div>
-
-            <div className="mt-12 text-center">
-              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/3 border border-white/8 text-white/30 text-xs">
-                <Heart size={11} className="text-rose-400" />
-                Souvenirs créés avec Bliss
+            <div className="mt-20 text-center">
+              <div className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-white/3 border border-white/8 text-white/30 text-xs">
+                <Heart size={12} className="text-rose-400" />
+                Souvenirs créés avec Casual Nights by Sipping
               </div>
             </div>
           </>

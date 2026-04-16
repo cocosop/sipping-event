@@ -73,7 +73,7 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-[#0d0d0d]">
-      {view !== 'auth' && (
+      {/* {view !== 'auth' && (
         <Header
           user={user}
           onSignOut={handleSignOut}
@@ -81,7 +81,7 @@ export default function App() {
           onGoToAuth={() => setView('auth')}
           transparent={view === 'landing'}
         />
-      )}
+      )} */}
 
       {view === 'landing' && <LandingPage onGoToAuth={() => setView('auth')} />}
       {view === 'auth' && (

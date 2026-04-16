@@ -24,15 +24,15 @@ export default function LandingPage({ onGoToAuth }: LandingPageProps) {
             className="text-5xl sm:text-6xl lg:text-7xl font-bold mb-6 leading-tight"
             style={{ fontFamily: "'Playfair Display', serif" }}
           >
-            Vos soirées,{' '}
+            No flex,{' '}
             <span className="bg-gradient-to-r from-amber-300 via-amber-400 to-amber-600 bg-clip-text text-transparent">
-              sublimées
+              Pure vibes
             </span>
           </h1>
 
           <p className="text-white/50 text-lg sm:text-xl max-w-2xl mx-auto mb-10 leading-relaxed">
-            La plateforme photo événementielle qui connecte les photographes à leurs invités.
-            Des souvenirs partagés, likés et téléchargés en un instant.
+            Bienvenue sur Eipic/Casual Nights la plateforme photos vidéos qui  connecte les photographes aux invités. 
+            Souvenirs partagés, likés, commentés et téléchargés en un instant
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center">

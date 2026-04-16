@@ -7,6 +7,7 @@ export interface Event {
   slug: string;
   photographer_id: string;
   cover_image: string | null;
+  cover_url: string | null;
   created_at: string;
 }
 
