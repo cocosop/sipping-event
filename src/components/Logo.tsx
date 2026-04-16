@@ -1,4 +1,4 @@
-import logoImg from '../assets/logo1.png';
+import logoImg from '../assets/sipingLogo.png';
 
 interface LogoProps {
   size?: 'sm' | 'md' | 'lg';
