@@ -1,3 +1,4 @@
+
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { Calendar, MapPin, Heart, Images, CircleAlert as AlertCircle, ChevronDown } from 'lucide-react';
 import { supabase } from '../lib/supabase';
@@ -25,7 +26,7 @@ export default function EventGallery({ slug }: EventGalleryProps) {
       galleryRef.current.scrollIntoView({ behavior: 'smooth' });
     }
   };
-const HERO_IMAGE = 'https://images.pexels.com/photos/3407777/pexels-photo-3407777.jpeg?auto=compress&cs=tinysrgb&w=1600';
+// const HERO_IMAGE = 'https://images.pexels.com/photos/3407777/pexels-photo-3407777.jpeg?auto=compress&cs=tinysrgb&w=1600';
   const loadEvent = useCallback(async () => {
     const { data: eventData } = await supabase
       .from('events')

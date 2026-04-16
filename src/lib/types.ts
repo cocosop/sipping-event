@@ -20,6 +20,8 @@ export interface Photo {
   photographer_id: string;
   created_at: string;
   expires_at: string;
+  media_type: 'photo' | 'video';
+  thumbnail_url: string | null;
   likes_count?: number;
   comments_count?: number;
   user_liked?: boolean;

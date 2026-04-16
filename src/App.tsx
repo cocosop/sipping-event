@@ -60,7 +60,7 @@ export default function App() {
             className="text-white/30 text-sm tracking-widest uppercase"
             style={{ fontFamily: "'Playfair Display', serif" }}
           >
-            Bliss
+            Casual Nights
           </p>
         </div>
       </div>

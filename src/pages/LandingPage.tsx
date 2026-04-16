@@ -1,5 +1,10 @@
-import { Camera, QrCode, Heart, Download, Clock, Star } from 'lucide-react';
+import { Camera, QrCode, Heart, Download, Clock, Film } from 'lucide-react';
 import Logo from '../components/Logo';
+
+const HERO_IMAGE = 'https://images.pexels.com/photos/3407777/pexels-photo-3407777.jpeg?auto=compress&cs=tinysrgb&w=1600';
+const WINE_1 = 'https://images.pexels.com/photos/1407846/pexels-photo-1407846.jpeg?auto=compress&cs=tinysrgb&w=800';
+const WINE_2 = 'https://images.pexels.com/photos/1510093/pexels-photo-1510093.jpeg?auto=compress&cs=tinysrgb&w=800';
+const WINE_3 = 'https://images.pexels.com/photos/696219/pexels-photo-696219.jpeg?auto=compress&cs=tinysrgb&w=800';
 
 interface LandingPageProps {
   onGoToAuth: () => void;
@@ -8,15 +13,16 @@ interface LandingPageProps {
 export default function LandingPage({ onGoToAuth }: LandingPageProps) {
   return (
     <div className="min-h-screen bg-[#0d0d0d] text-white overflow-x-hidden">
-      <section className="relative min-h-screen flex flex-col items-center justify-center px-4 overflow-hidden">
-        <div className="absolute inset-0 overflow-hidden">
-          <div className="absolute top-1/4 left-1/3 w-96 h-96 bg-amber-400/5 rounded-full blur-3xl" />
-          <div className="absolute bottom-1/3 right-1/4 w-64 h-64 bg-rose-400/5 rounded-full blur-3xl" />
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-amber-400/3 rounded-full blur-3xl" />
-        </div>
+      <section className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden">
+        <div
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+          style={{ backgroundImage: `url(${HERO_IMAGE})` }}
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/65 via-black/50 to-[#0d0d0d]" />
+        <div className="absolute inset-0 bg-gradient-to-r from-black/40 via-transparent to-black/40" />
 
-        <div className="relative z-10 text-center max-w-4xl mx-auto">
-          <div className="flex justify-center mb-8">
+        <div className="relative z-10 text-center max-w-4xl mx-auto px-4">
+          <div className="flex justify-center mb-10">
             <Logo size="lg" />
           </div>
 
@@ -38,28 +44,38 @@ export default function LandingPage({ onGoToAuth }: LandingPageProps) {
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <button
               onClick={onGoToAuth}
-              className="px-8 py-4 rounded-full bg-gradient-to-r from-amber-400 to-amber-500 text-black font-bold text-base hover:from-amber-300 hover:to-amber-400 transition-all shadow-[0_0_30px_rgba(201,168,76,0.3)] hover:shadow-[0_0_40px_rgba(201,168,76,0.5)]"
+              className="px-8 py-4 rounded-full bg-gradient-to-r from-amber-400 to-amber-500 text-black font-bold text-base hover:from-amber-300 hover:to-amber-400 transition-all shadow-[0_0_40px_rgba(201,168,76,0.4)] hover:shadow-[0_0_60px_rgba(201,168,76,0.6)]"
             >
               Espace Photographe
             </button>
             <a
               href="#features"
-              className="px-8 py-4 rounded-full border border-white/20 text-white/70 hover:text-white hover:border-white/40 text-base transition-all"
+              className="px-8 py-4 rounded-full border border-white/30 text-white/80 hover:text-white hover:border-white/60 text-base transition-all backdrop-blur-sm"
             >
-              En savoir plus
+              Découvrir
             </a>
           </div>
         </div>
 
-        <div className="absolute bottom-10 left-0 right-0 flex justify-center">
-          <div className="flex gap-2">
-            {[...Array(5)].map((_, i) => (
-              <div
-                key={i}
-                className="w-1.5 h-8 rounded-full bg-gradient-to-b from-amber-400 to-transparent opacity-60"
-                style={{ animationDelay: `${i * 0.2}s` }}
-              />
+        <div className="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-[#0d0d0d] to-transparent" />
+      </section>
+
+      <section className="py-16 px-4 relative overflow-hidden">
+        <div className="max-w-6xl mx-auto">
+          <div className="grid grid-cols-3 gap-3 sm:gap-4 rounded-3xl overflow-hidden">
+            {[WINE_1, WINE_2, WINE_3].map((src, i) => (
+              <div key={i} className="aspect-[3/4] relative overflow-hidden group">
+                <img
+                  src={src}
+                  alt=""
+                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+              </div>
             ))}
+          </div>
+          <div className="text-center mt-6">
+            <p className="text-white/25 text-xs uppercase tracking-[0.3em]">Casual Nights — By Sipping</p>
           </div>
         </div>
       </section>
@@ -83,7 +99,7 @@ export default function LandingPage({ onGoToAuth }: LandingPageProps) {
               {
                 icon: Camera,
                 title: 'Le photographe publie',
-                desc: "Créez un événement, obtenez un QR code unique et publiez vos plus belles photos directement depuis l'interface Bliss.",
+                desc: "Créez un événement, obtenez un QR code unique et publiez photos & vidéos directement depuis l'interface Casual Nights.",
                 color: 'from-amber-400 to-amber-600',
               },
               {
@@ -95,13 +111,13 @@ export default function LandingPage({ onGoToAuth }: LandingPageProps) {
               {
                 icon: Heart,
                 title: 'Likez & partagez',
-                desc: 'Les invités likent, commentent et téléchargent leurs photos préférées. Les souvenirs vivent pour toujours.',
+                desc: 'Les invités likent, commentent et téléchargent leurs moments préférés. Les souvenirs vivent pour toujours.',
                 color: 'from-sky-400 to-sky-600',
               },
             ].map((item) => (
               <div
                 key={item.title}
-                className="p-6 rounded-3xl bg-white/3 border border-white/8 hover:border-white/15 transition-all hover:bg-white/5 group"
+                className="p-6 rounded-3xl bg-white/3 border border-white/8 hover:border-amber-400/20 transition-all hover:bg-white/5 group"
               >
                 <div className={`w-12 h-12 rounded-2xl bg-gradient-to-br ${item.color} flex items-center justify-center mb-5 shadow-lg group-hover:scale-110 transition-transform`}>
                   <item.icon size={22} className="text-white" />
@@ -129,11 +145,11 @@ export default function LandingPage({ onGoToAuth }: LandingPageProps) {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-5">
             {[
               { icon: Heart, label: 'Likes', desc: 'Anonymes & instantanés' },
-              { icon: Download, label: 'Téléchargement', desc: 'Photos en haute qualité' },
-              { icon: Star, label: 'Commentaires', desc: 'Réactions en temps réel' },
+              { icon: Download, label: 'Téléchargement', desc: 'Haute qualité' },
+              { icon: Film, label: 'Vidéos', desc: 'Photos & vidéos' },
               { icon: Clock, label: '7 jours', desc: 'Suppression automatique' },
             ].map((feat) => (
-              <div key={feat.label} className="p-5 rounded-2xl bg-white/3 border border-white/8 text-center">
+              <div key={feat.label} className="p-5 rounded-2xl bg-white/3 border border-white/8 text-center hover:border-amber-400/20 transition-all">
                 <feat.icon size={22} className="mx-auto mb-3 text-amber-400" />
                 <p className="text-white font-semibold text-sm">{feat.label}</p>
                 <p className="text-white/40 text-xs mt-1">{feat.desc}</p>
@@ -143,8 +159,11 @@ export default function LandingPage({ onGoToAuth }: LandingPageProps) {
         </div>
       </section>
 
-      <section className="py-24 px-4 text-center">
-        <div className="max-w-2xl mx-auto">
+      <section className="py-24 px-4 text-center relative overflow-hidden">
+        <div className="absolute inset-0">
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-amber-400/5 rounded-full blur-3xl" />
+        </div>
+        <div className="relative z-10 max-w-2xl mx-auto">
           <h2
             className="text-3xl sm:text-4xl font-bold text-white mb-6"
             style={{ fontFamily: "'Playfair Display', serif" }}
@@ -152,21 +171,23 @@ export default function LandingPage({ onGoToAuth }: LandingPageProps) {
             Prêt à capturer la magie ?
           </h2>
           <p className="text-white/40 text-base mb-8">
-            Rejoignez Bliss et offrez à vos invités une expérience photo inoubliable.
+            Rejoignez Casual Nights by Sipping et offrez à vos invités une expérience inoubliable.
           </p>
           <button
             onClick={onGoToAuth}
-            className="px-10 py-4 rounded-full bg-gradient-to-r from-amber-400 to-amber-500 text-black font-bold text-base hover:from-amber-300 hover:to-amber-400 transition-all shadow-[0_0_30px_rgba(201,168,76,0.3)]"
+            className="px-10 py-4 rounded-full bg-gradient-to-r from-amber-400 to-amber-500 text-black font-bold text-base hover:from-amber-300 hover:to-amber-400 transition-all shadow-[0_0_30px_rgba(201,168,76,0.3)] hover:shadow-[0_0_50px_rgba(201,168,76,0.5)]"
           >
             Commencer gratuitement
           </button>
         </div>
       </section>
 
-      <footer className="border-t border-white/5 py-8 px-4 text-center">
-        <Logo size="sm" />
-        <p className="text-white/20 text-xs mt-4">
-          © 2024 Bliss — Tous droits réservés
+      <footer className="border-t border-white/5 py-10 px-4 text-center">
+        <div className="flex justify-center mb-3">
+          <Logo size="sm" />
+        </div>
+        <p className="text-white/20 text-xs mt-2">
+          © 2024 Casual Nights — By Sipping — Tous droits réservés
         </p>
       </footer>
     </div>
