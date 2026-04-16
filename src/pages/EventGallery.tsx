@@ -153,15 +153,30 @@ export default function EventGallery({ slug }: EventGalleryProps) {
             <Logo size="lg" />
           </div>
 
+          <h2 className="text-base sm:text-lg text-white/60 uppercase tracking-[0.2em] mb-4" style={{ fontFamily: "'Inter', sans-serif" }}>
+            Bienvenue
+          </h2>
+
           <h1
-            className="text-5xl sm:text-6xl lg:text-7xl font-bold mb-6 leading-tight"
+            className="text-5xl sm:text-6xl lg:text-7xl font-bold mb-4 leading-tight"
             style={{ fontFamily: "'Playfair Display', serif" }}
           >
-            {event?.name}
+            Vos soirées,{' '}
+            <span className="bg-gradient-to-r from-amber-300 via-amber-400 to-amber-600 bg-clip-text text-transparent">
+              immortalisées
+            </span>
           </h1>
 
+          <p className="text-white/70 text-lg sm:text-xl max-w-2xl mx-auto mb-8 leading-relaxed">
+            La plateforme photo & vidéo qui connecte photographes et invités. Souvenirs partagés, likés et téléchargés en un instant.
+          </p>
+
+          <h3 className="text-2xl sm:text-3xl font-bold text-white mb-8" style={{ fontFamily: "'Playfair Display', serif" }}>
+            {event?.name}
+          </h3>
+
           {event?.description && (
-            <p className="text-white/70 text-lg sm:text-xl max-w-2xl mx-auto mb-10 leading-relaxed">
+            <p className="text-white/60 text-base max-w-xl mx-auto mb-10">
               {event.description}
             </p>
           )}
