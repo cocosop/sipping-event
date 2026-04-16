@@ -1,5 +1,5 @@
-import { useState, useEffect, useCallback } from 'react';
-import { Calendar, MapPin, Heart, Images, CircleAlert as AlertCircle } from 'lucide-react';
+import { useState, useEffect, useCallback, useRef } from 'react';
+import { Calendar, MapPin, Heart, Images, CircleAlert as AlertCircle, ChevronDown } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 import type { Event, Photo } from '../lib/types';
 import { formatDate, getOrCreateGuestId } from '../lib/utils';
@@ -18,6 +18,13 @@ export default function EventGallery({ slug }: EventGalleryProps) {
   const [notFound, setNotFound] = useState(false);
   const [selectedPhotoIndex, setSelectedPhotoIndex] = useState<number | null>(null);
   const guestId = getOrCreateGuestId();
+  const galleryRef = useRef<HTMLDivElement>(null);
+
+  const scrollToGallery = () => {
+    if (galleryRef.current) {
+      galleryRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
 
   const loadEvent = useCallback(async () => {
     const { data: eventData } = await supabase
@@ -134,60 +141,82 @@ export default function EventGallery({ slug }: EventGalleryProps) {
 
   return (
     <div className="min-h-screen bg-[#0d0d0d] text-white">
-      <div className="relative overflow-hidden">
+      <section className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden">
         <div className="absolute inset-0">
-          <div className="absolute top-0 left-1/3 w-96 h-96 bg-amber-400/5 rounded-full blur-3xl" />
-          <div className="absolute bottom-0 right-1/4 w-64 h-64 bg-rose-400/5 rounded-full blur-3xl" />
+          <div className="absolute top-1/4 left-1/3 w-96 h-96 bg-amber-400/5 rounded-full blur-3xl" />
+          <div className="absolute bottom-1/3 right-1/4 w-64 h-64 bg-rose-400/5 rounded-full blur-3xl" />
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-amber-400/3 rounded-full blur-3xl" />
         </div>
 
-        <div className="relative z-10 max-w-5xl mx-auto px-4 pt-12 pb-10">
-          <div className="flex justify-center mb-8">
-            <Logo size="sm" />
+        <div className="relative z-10 text-center max-w-4xl mx-auto px-4">
+          <div className="flex justify-center mb-10">
+            <Logo size="lg" />
           </div>
 
-          <div className="text-center">
-            <h1
-              className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-3"
-              style={{ fontFamily: "'Playfair Display', serif" }}
-            >
-              {event?.name}
-            </h1>
+          <h1
+            className="text-5xl sm:text-6xl lg:text-7xl font-bold mb-6 leading-tight"
+            style={{ fontFamily: "'Playfair Display', serif" }}
+          >
+            {event?.name}
+          </h1>
 
-            {event?.description && (
-              <p className="text-white/50 text-base max-w-xl mx-auto mb-4">{event.description}</p>
+          {event?.description && (
+            <p className="text-white/70 text-lg sm:text-xl max-w-2xl mx-auto mb-10 leading-relaxed">
+              {event.description}
+            </p>
+          )}
+
+          <div className="flex flex-wrap items-center justify-center gap-6 mb-12">
+            {event?.date && (
+              <span className="flex items-center gap-2 text-white/60 text-base">
+                <Calendar size={18} className="text-amber-400" />
+                {formatDate(event.date)}
+              </span>
             )}
+            {event?.venue && (
+              <span className="flex items-center gap-2 text-white/60 text-base">
+                <MapPin size={18} className="text-amber-400" />
+                {event.venue}
+              </span>
+            )}
+          </div>
 
-            <div className="flex flex-wrap items-center justify-center gap-4 mb-6">
-              {event?.date && (
-                <span className="flex items-center gap-1.5 text-white/50 text-sm">
-                  <Calendar size={14} className="text-amber-400" />
-                  {formatDate(event.date)}
-                </span>
-              )}
-              {event?.venue && (
-                <span className="flex items-center gap-1.5 text-white/50 text-sm">
-                  <MapPin size={14} className="text-amber-400" />
-                  {event.venue}
-                </span>
-              )}
+          <div className="flex items-center justify-center gap-8 mb-12">
+            <div className="text-center">
+              <p className="text-white font-bold text-3xl">{photos.length}</p>
+              <p className="text-white/30 text-xs uppercase tracking-wider mt-1">Souvenirs</p>
             </div>
-
-            <div className="flex items-center justify-center gap-6">
-              <div className="text-center">
-                <p className="text-white font-bold text-2xl">{photos.length}</p>
-                <p className="text-white/30 text-xs uppercase tracking-wider mt-0.5">Photos</p>
-              </div>
-              <div className="w-px h-8 bg-white/10" />
-              <div className="text-center">
-                <p className="text-white font-bold text-2xl">{totalLikes}</p>
-                <p className="text-white/30 text-xs uppercase tracking-wider mt-0.5">Likes</p>
-              </div>
+            <div className="w-px h-10 bg-white/10" />
+            <div className="text-center">
+              <p className="text-white font-bold text-3xl">{totalLikes}</p>
+              <p className="text-white/30 text-xs uppercase tracking-wider mt-1">Cœurs</p>
             </div>
           </div>
-        </div>
-      </div>
 
-      <div className="max-w-6xl mx-auto px-4 pb-16">
+          {photos.length > 0 && (
+            <button
+              onClick={scrollToGallery}
+              className="px-8 py-3 rounded-full bg-gradient-to-r from-amber-400 to-amber-500 text-black font-bold text-base hover:from-amber-300 hover:to-amber-400 transition-all shadow-[0_0_30px_rgba(201,168,76,0.3)] hover:shadow-[0_0_50px_rgba(201,168,76,0.5)]"
+            >
+              Voir plus
+            </button>
+          )}
+        </div>
+
+        {photos.length > 0 && (
+          <div className="absolute bottom-8 left-0 right-0 flex justify-center">
+            <button
+              onClick={scrollToGallery}
+              className="animate-bounce p-2 rounded-full text-amber-400 hover:text-amber-300 transition-colors"
+              aria-label="Scroll to gallery"
+            >
+              <ChevronDown size={24} />
+            </button>
+          </div>
+        )}
+      </section>
+
+      <div className="max-w-6xl mx-auto px-4 pb-16" ref={galleryRef}>
         {photos.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-20 text-center">
             <Images size={40} className="text-white/15 mb-4" />
