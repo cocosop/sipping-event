@@ -5,7 +5,7 @@ interface LogoProps {
   variant?: 'light' | 'dark'; // <-- Il faut l'ajouter ici
 }
 
-// Ajoute variant dans la déstructuration avec une valeur par défaut
+// Ajoute variant dans la déstructuration avec une valeur par 
 export default function Logo({ size = 'md', variant = 'light' }: LogoProps) {
   const sizes = {
     sm: { icon: 35, text: 'text-xs', sub: 'text-[0.4rem]', gap: 'gap-1.5' },
