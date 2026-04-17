@@ -40,7 +40,7 @@ export default function Logo({ size = 'md', variant = 'light' }: LogoProps) {
             letterSpacing: '0.02em'
           }}
         >
-          Casual Nights By Sipping
+          Casual Nights 
         </span>
         
         <span
@@ -50,7 +50,7 @@ export default function Logo({ size = 'md', variant = 'light' }: LogoProps) {
             lineHeight: '1'
           }}
         >
-          BassTechnologies
+          By Sipping
         </span>
       </div>
     </div>

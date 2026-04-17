@@ -1,7 +1,8 @@
 import { Camera, QrCode, Heart, Download, Clock, Film } from 'lucide-react';
 import Logo from '../components/Logo';
+import bgimage from './../assets/bgimg.jpeg'
 
-const HERO_IMAGE = 'https://images.pexels.com/photos/3407777/pexels-photo-3407777.jpeg?auto=compress&cs=tinysrgb&w=1600';
+const HERO_IMAGE = bgimage;
 const WINE_1 = 'https://images.pexels.com/photos/1407846/pexels-photo-1407846.jpeg?auto=compress&cs=tinysrgb&w=800';
 const WINE_2 = 'https://images.pexels.com/photos/1510093/pexels-photo-1510093.jpeg?auto=compress&cs=tinysrgb&w=800';
 const WINE_3 = 'https://images.pexels.com/photos/696219/pexels-photo-696219.jpeg?auto=compress&cs=tinysrgb&w=800';
@@ -16,7 +17,12 @@ export default function LandingPage({ onGoToAuth }: LandingPageProps) {
       <section className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden">
         <div
           className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-          style={{ backgroundImage: `url(${HERO_IMAGE})` }}
+          style={{ 
+           backgroundImage: `url(${HERO_IMAGE})`,
+           backgroundPosition: '50% 35%'
+       
+        }}
+        
         />
         <div className="absolute inset-0 bg-gradient-to-b from-black/65 via-black/50 to-[#0d0d0d]" />
         <div className="absolute inset-0 bg-gradient-to-r from-black/40 via-transparent to-black/40" />
@@ -187,7 +193,7 @@ export default function LandingPage({ onGoToAuth }: LandingPageProps) {
           <Logo size="sm" />
         </div>
         <p className="text-white/20 text-xs mt-2">
-          © 2024 Casual Nights — By Sipping — Tous droits réservés
+          © 2026 Powered by Bass Technologies. All rights reserved.
         </p>
       </footer>
     </div>

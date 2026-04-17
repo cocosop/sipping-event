@@ -7,6 +7,7 @@ import { formatDate, getOrCreateGuestId } from '../lib/utils';
 import PhotoCard from '../components/PhotoCard';
 import PhotoModal from '../components/PhotoModal';
 import Logo from '../components/Logo';
+import bgimage from './../assets/bgimg.jpeg'
 
 interface EventGalleryProps {
   slug: string;
@@ -20,13 +21,14 @@ export default function EventGallery({ slug }: EventGalleryProps) {
   const [selectedPhotoIndex, setSelectedPhotoIndex] = useState<number | null>(null);
   const guestId = getOrCreateGuestId();
   const galleryRef = useRef<HTMLDivElement>(null);
+  const HERO_IMAGE = bgimage;
+
 
   const scrollToGallery = () => {
     if (galleryRef.current) {
       galleryRef.current.scrollIntoView({ behavior: 'smooth' });
     }
   };
-// const HERO_IMAGE = 'https://images.pexels.com/photos/3407777/pexels-photo-3407777.jpeg?auto=compress&cs=tinysrgb&w=1600';
   const loadEvent = useCallback(async () => {
     const { data: eventData } = await supabase
       .from('events')
@@ -139,11 +141,12 @@ export default function EventGallery({ slug }: EventGalleryProps) {
     <div className="min-h-screen bg-[#0d0d0d] text-white">
    {/* --- SECTION HERO --- */}
 <section className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden">
-  {/* Image de fond : on utilise l'image de l'événement ou une image par défaut si non définie */}
+  {/* Image de fond : on affine le réglage vertical à 35% pour ne pas trop monter */}
   <div
-    className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+    className="absolute inset-0 bg-cover bg-no-repeat"
     style={{ 
-      backgroundImage: `url(${event?.cover_url || 'https://images.pexels.com/photos/3407777/pexels-photo-3407777.jpeg?auto=compress&cs=tinysrgb&w=1600'})` 
+      backgroundImage: `url(${event?.cover_url || HERO_IMAGE})`,
+      backgroundPosition: '50% 35%' // 35% est souvent le "sweet spot" pour les photos de paysage/piscine
     }}
   />
   
@@ -169,9 +172,9 @@ export default function EventGallery({ slug }: EventGalleryProps) {
             Bienvenue sur Eipic/Casual Nights la plateforme photos vidéos qui  connecte les photographes aux invités. Souvenirs partagés, likés, commentés et téléchargés en un instant
           </p>
 
-    <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold mb-8 leading-tight" style={{ fontFamily: "'Playfair Display', serif" }}>
-      {event?.name}
-    </h1>
+    <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-6 leading-tight" style={{ fontFamily: "'Playfair Display', serif" }}>
+  {event?.name}
+</h1>
 
     <div className="flex flex-col items-center gap-6 mb-12">
       <button
@@ -201,7 +204,7 @@ export default function EventGallery({ slug }: EventGalleryProps) {
       {/* --- SECTION GALERIE (CONTENU DÉCOUVERT AU SCROLL) --- */}
       <div className="max-w-6xl mx-auto px-4 pb-16 pt-20" ref={galleryRef}>
         <div className="text-center mb-16">
-          <h3 className="text-4xl sm:text-5xl font-bold text-white mb-6" style={{ fontFamily: "'Playfair Display', serif" }}>
+          <h3 className="text-xl sm:text-5xl font-bold text-white mb-6" style={{ fontFamily: "'Playfair Display', serif" }}>
             {event?.name}
           </h3>
 
@@ -282,6 +285,15 @@ export default function EventGallery({ slug }: EventGalleryProps) {
           onUnlike={handleModalUnlike}
         />
       )}
+
+      <footer className="border-t border-white/5 py-10 px-4 text-center">
+              <div className="flex justify-center mb-3">
+                <Logo size="sm" />
+              </div>
+              <p className="text-white/20 text-xs mt-2">
+                © 2026 Powered by Bass Technologies. All rights reserved.
+              </p>
+            </footer>
     </div>
   );
 }
