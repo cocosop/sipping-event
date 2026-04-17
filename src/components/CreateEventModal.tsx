@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { X, Sparkles } from 'lucide-react';
+import { X } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 import { generateSlug } from '../lib/utils';
 import type { User } from '@supabase/supabase-js';
@@ -49,7 +49,6 @@ export default function CreateEventModal({ user, onClose, onCreated }: CreateEve
       <div className="w-full max-w-md bg-[#111111] border border-white/10 rounded-3xl p-6 shadow-2xl">
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center gap-2">
-            <Sparkles size={18} className="text-amber-400" />
             <h2 className="text-white font-semibold text-lg" style={{ fontFamily: "'Playfair Display', serif" }}>
               Nouvel événement
             </h2>

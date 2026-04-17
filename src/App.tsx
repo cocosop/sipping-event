@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from './hooks/useAuth';
 import type { AppView } from './lib/types';
+import Header from './components/Header';
 import LandingPage from './pages/LandingPage';
 import AuthPage from './pages/AuthPage';
 import PhotographerDashboard from './pages/PhotographerDashboard';
@@ -12,7 +13,7 @@ function getEventSlugFromUrl(): string | null {
 }
 
 export default function App() {
-  const { user, loading, signIn, signUp } = useAuth();
+  const { user, loading, signIn, signUp, signOut } = useAuth();
   const [view, setView] = useState<AppView>('landing');
   const [eventSlug, setEventSlug] = useState<string | null>(null);
 
@@ -42,7 +43,12 @@ export default function App() {
     await signUp(email, password);
   }
 
-   if (loading) {
+  async function handleSignOut() {
+    await signOut();
+    setView('landing');
+  }
+
+  if (loading) {
     return (
       <div className="min-h-screen bg-[#0d0d0d] flex items-center justify-center">
         <div className="flex flex-col items-center gap-4">
@@ -67,7 +73,7 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-[#0d0d0d]">
-      {/* {view !== 'auth' && (
+      {view !== 'auth' && (
         <Header
           user={user}
           onSignOut={handleSignOut}
@@ -75,7 +81,7 @@ export default function App() {
           onGoToAuth={() => setView('auth')}
           transparent={view === 'landing'}
         />
-      )} */}
+      )}
 
       {view === 'landing' && <LandingPage onGoToAuth={() => setView('auth')} />}
       {view === 'auth' && (
